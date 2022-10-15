@@ -1,4 +1,4 @@
--- Adminer 4.8.1 MySQL 8.0.29 dump
+-- Adminer 4.8.1 MySQL 8.0.31 dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -7,6 +7,7 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 SET NAMES utf8mb4;
 
+DROP DATABASE IF EXISTS `BarBaridadeApp`;
 CREATE DATABASE `BarBaridadeApp` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `BarBaridadeApp`;
 
@@ -19,6 +20,11 @@ CREATE TABLE `Characteristics` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `Characteristics` (`id`, `createdAt`, `title`, `description`) VALUES
+(1,	'2022-10-05 16:14:54',	'Vegano',	'Não possui nenhum derivado de animais'),
+(2,	'2022-10-05 16:15:17',	'Sem lactose',	'Nao possui lactose, derivdos, leite, queijo'),
+(3,	'2022-10-05 16:16:01',	'Sem ovo',	'Não possui ovo na composição'),
+(4,	'2022-10-05 16:16:01',	'Sem açúcar',	'Não possui açũcar, mas pode possuir adoçantes');
 
 DROP TABLE IF EXISTS `CharacteristicsProducts`;
 CREATE TABLE `CharacteristicsProducts` (
@@ -30,6 +36,19 @@ CREATE TABLE `CharacteristicsProducts` (
   CONSTRAINT `CharacteristicsProducts_FK_1` FOREIGN KEY (`characteristicsId`) REFERENCES `Characteristics` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `CharacteristicsProducts` (`characteristicsId`, `productsId`) VALUES
+(1,	106),
+(1,	108),
+(2,	110),
+(2,	111),
+(1,	112),
+(3,	117),
+(1,	118),
+(4,	118),
+(1,	119),
+(4,	119),
+(1,	123),
+(3,	130);
 
 DROP TABLE IF EXISTS `Customers`;
 CREATE TABLE `Customers` (
@@ -44,12 +63,17 @@ CREATE TABLE `Customers` (
   CONSTRAINT `Customers_FK` FOREIGN KEY (`tenantId`) REFERENCES `Tenants` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `Customers` (`id`, `createdAt`, `name`, `email`, `phoneNumber`, `tenantId`) VALUES
+(64,	'2022-09-03 06:52:03',	'Brenden Lee',	'congue.turpis.in@protonmail.com',	'1-817-903-7436',	1),
+(65,	'2022-09-03 06:52:03',	'Kane Bowen',	'erat.vivamus.nisi@icloud.couk',	'1-202-595-1858',	1),
+(66,	'2022-09-03 06:52:03',	'Nehru Clay',	'purus.sapien@hotmail.couk',	'1-726-129-5628',	1),
+(67,	'2022-09-03 06:52:03',	'Tashya Welch',	'vitae@aol.com',	'(383) 802-1857',	1),
+(68,	'2022-09-03 06:52:03',	'Iola Frazier',	'molestie.pharetra.nibh@hotmail.net',	'(114) 979-1443',	1);
 
 DROP TABLE IF EXISTS `Orders`;
 CREATE TABLE `Orders` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `title` varchar(100) NOT NULL,
   `customerId` bigint DEFAULT NULL,
   `closedAt` datetime DEFAULT NULL,
   `pricePaid` float DEFAULT NULL,
@@ -69,8 +93,28 @@ CREATE TABLE `Orders` (
   CONSTRAINT `Orders_FK_3` FOREIGN KEY (`tenantId`) REFERENCES `Tenants` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `Orders` (`id`, `createdAt`, `title`, `customerId`, `closedAt`, `pricePaid`, `howManyPeople`, `tableId`, `waiterId`, `tip`, `tenantId`) VALUES
-(1,	'2022-08-24 21:37:15',	'Abobrinha',	NULL,	NULL,	NULL,	2,	NULL,	NULL,	NULL,	1);
+INSERT INTO `Orders` (`id`, `createdAt`, `customerId`, `closedAt`, `pricePaid`, `howManyPeople`, `tableId`, `waiterId`, `tip`, `tenantId`) VALUES
+(32,	'2022-09-23 06:05:18',	66,	NULL,	27.61,	1,	5,	14,	3.65,	1),
+(33,	'2022-09-23 06:05:18',	66,	NULL,	60.45,	0,	7,	6,	18.7,	1),
+(34,	'2022-09-23 06:05:18',	66,	NULL,	75.73,	0,	9,	13,	15.69,	1),
+(35,	'2022-09-23 06:05:18',	67,	NULL,	64.75,	1,	8,	19,	9.81,	1),
+(36,	'2022-09-23 06:05:18',	65,	NULL,	3.22,	0,	8,	10,	14.59,	1),
+(37,	'2022-09-23 06:05:18',	66,	NULL,	10.16,	0,	6,	6,	7.09,	1),
+(38,	'2022-09-23 06:05:18',	66,	NULL,	16.71,	0,	5,	9,	12.87,	1),
+(39,	'2022-09-23 06:05:18',	65,	NULL,	47.32,	0,	8,	12,	6.23,	1),
+(40,	'2022-09-23 06:05:18',	66,	NULL,	38.31,	0,	2,	13,	9.79,	1),
+(41,	'2022-09-23 06:05:18',	68,	NULL,	85.41,	0,	7,	2,	15.89,	1),
+(42,	'2022-09-25 15:42:31',	64,	NULL,	44.25,	1,	5,	18,	25.56,	1),
+(43,	'2022-09-25 15:42:31',	64,	NULL,	66.22,	0,	6,	9,	3.88,	1),
+(44,	'2022-09-25 15:42:31',	65,	NULL,	50.1,	1,	7,	18,	20.64,	1),
+(45,	'2022-09-25 15:42:31',	66,	NULL,	48.4,	1,	5,	7,	26.45,	1),
+(46,	'2022-09-25 15:42:31',	64,	NULL,	4.71,	0,	6,	14,	28.84,	1),
+(47,	'2022-09-25 15:42:31',	65,	NULL,	5.38,	1,	6,	6,	6.67,	1),
+(48,	'2022-09-25 15:42:31',	67,	NULL,	91,	0,	8,	11,	23.97,	1),
+(49,	'2022-09-25 15:42:31',	64,	NULL,	39.33,	1,	3,	12,	4.61,	1),
+(50,	'2022-09-25 15:42:31',	66,	NULL,	99.01,	0,	8,	4,	2.13,	1),
+(51,	'2022-09-25 15:42:31',	64,	NULL,	54.01,	0,	3,	13,	18.17,	1),
+(52,	'2022-10-01 21:10:46',	64,	NULL,	50,	1,	NULL,	13,	20,	1);
 
 DROP TABLE IF EXISTS `OrdersProducts`;
 CREATE TABLE `OrdersProducts` (
@@ -84,19 +128,44 @@ CREATE TABLE `OrdersProducts` (
   `orderProductId` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `OrdersProducts_FK` (`orderId`),
-  KEY `OrdersProducts_FK_1` (`productId`),
   KEY `OrdersProducts_FK_2` (`orderProductId`),
+  KEY `OrdersProducts_FK_1` (`productId`),
   CONSTRAINT `OrdersProducts_FK` FOREIGN KEY (`orderId`) REFERENCES `Orders` (`id`),
   CONSTRAINT `OrdersProducts_FK_1` FOREIGN KEY (`productId`) REFERENCES `Products` (`id`),
   CONSTRAINT `OrdersProducts_FK_2` FOREIGN KEY (`orderProductId`) REFERENCES `OrdersProducts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `OrdersProducts` (`id`, `createdAt`, `orderId`, `productId`, `quantity`, `price`, `observation`, `orderProductId`) VALUES
-(1,	'2022-08-24 21:39:29',	1,	4,	1,	30,	NULL,	NULL),
-(2,	'2022-08-24 21:40:34',	1,	3,	1,	3,	NULL,	1),
-(3,	'2022-08-24 21:53:53',	1,	2,	1,	30,	NULL,	NULL),
-(4,	'2022-08-24 21:53:53',	1,	3,	1,	3,	NULL,	3),
-(5,	'2022-08-24 22:02:47',	1,	5,	1,	3,	NULL,	1);
+(1,	'2022-09-23 17:02:18',	33,	119,	20,	1,	'in magna. Phasellus dolor elit,',	NULL),
+(2,	'2022-09-23 17:02:18',	39,	138,	19,	10,	'Aliquam ultrices iaculis odio. Nam',	NULL),
+(3,	'2022-09-23 17:02:18',	38,	146,	1,	4,	'id, ante. Nunc mauris sapien,',	NULL),
+(4,	'2022-09-23 17:02:18',	40,	110,	12,	6,	'est, mollis non, cursus non,',	NULL),
+(5,	'2022-09-23 17:02:18',	35,	116,	8,	8,	'vitae, orci. Phasellus dapibus quam',	NULL),
+(6,	'2022-09-23 17:02:18',	41,	127,	4,	7,	'elit. Etiam laoreet, libero et',	NULL),
+(7,	'2022-09-23 17:02:18',	39,	128,	7,	9,	'eget nisi dictum augue malesuada',	NULL),
+(8,	'2022-09-23 17:02:18',	33,	110,	19,	8,	'et, rutrum non, hendrerit id,',	NULL),
+(9,	'2022-09-23 17:02:18',	34,	136,	4,	3,	'Aliquam vulputate ullamcorper magna. Sed',	NULL),
+(10,	'2022-09-23 17:02:18',	35,	150,	8,	1,	'Nam ac nulla. In tincidunt',	NULL),
+(11,	'2022-09-23 17:03:02',	40,	131,	14,	3,	'lacinia mattis. Integer eu lacus.',	NULL),
+(12,	'2022-09-23 17:03:02',	35,	139,	15,	6,	'lectus pede, ultrices a, auctor',	NULL),
+(13,	'2022-09-23 17:03:02',	33,	125,	7,	7,	'eu tempor erat neque non',	NULL),
+(14,	'2022-09-23 17:03:02',	41,	115,	8,	4,	'natoque penatibus et magnis dis',	NULL),
+(15,	'2022-09-23 17:03:02',	36,	125,	19,	2,	'placerat eget, venenatis a, magna.',	NULL),
+(16,	'2022-09-23 17:03:02',	36,	111,	15,	9,	'nec, imperdiet nec, leo. Morbi',	NULL),
+(17,	'2022-09-23 17:03:02',	41,	143,	7,	5,	'turpis egestas. Aliquam fringilla cursus',	NULL),
+(18,	'2022-09-23 17:03:02',	34,	134,	8,	9,	'pretium aliquet, metus urna convallis',	NULL),
+(19,	'2022-09-23 17:03:02',	36,	143,	7,	6,	'aliquet libero. Integer in magna.',	NULL),
+(20,	'2022-09-23 17:03:02',	38,	129,	9,	6,	'sollicitudin orci sem eget massa.',	NULL),
+(21,	'2022-09-23 17:03:17',	33,	122,	14,	7,	'accumsan sed, facilisis vitae, orci.',	NULL),
+(22,	'2022-09-23 17:03:17',	32,	123,	1,	5,	'vestibulum lorem, sit amet ultricies',	NULL),
+(23,	'2022-09-23 17:03:17',	39,	118,	1,	9,	'malesuada fames ac turpis egestas.',	NULL),
+(24,	'2022-09-23 17:03:17',	39,	151,	17,	4,	'ut, pharetra sed, hendrerit a,',	NULL),
+(25,	'2022-09-23 17:03:17',	36,	136,	3,	2,	'diam. Sed diam lorem, auctor',	NULL),
+(26,	'2022-09-23 17:03:17',	36,	114,	8,	3,	'metus. In lorem. Donec elementum,',	NULL),
+(27,	'2022-09-23 17:03:17',	40,	126,	20,	7,	'tortor. Integer aliquam adipiscing lacus.',	NULL),
+(28,	'2022-09-23 17:03:17',	34,	112,	18,	8,	'semper auctor. Mauris vel turpis.',	NULL),
+(29,	'2022-09-23 17:03:17',	34,	148,	11,	10,	'et, lacinia vitae, sodales at,',	NULL),
+(30,	'2022-09-23 17:03:17',	33,	116,	9,	7,	'mollis. Duis sit amet diam',	NULL);
 
 DROP TABLE IF EXISTS `Products`;
 CREATE TABLE `Products` (
@@ -113,10 +182,56 @@ CREATE TABLE `Products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `Products` (`id`, `createdAt`, `price`, `title`, `stock`, `tenantId`, `isPrimary`) VALUES
-(2,	'2022-08-24 21:25:56',	30,	'Hambúrguer',	50,	1,	1),
-(3,	'2022-08-24 21:26:22',	3,	'Bacon',	34,	1,	0),
-(4,	'2022-08-24 21:28:09',	30,	'X-Tudo',	50,	1,	1),
-(5,	'2022-08-24 21:57:43',	3,	'Queijo',	56,	1,	0);
+(106,	'2022-09-03 16:08:44',	27.92,	'Hopper',	38,	1,	1),
+(107,	'2022-09-03 16:08:44',	28.05,	'Pate',	35,	1,	1),
+(108,	'2022-09-03 16:08:44',	23.61,	'Parrish',	34,	1,	0),
+(109,	'2022-09-03 16:08:44',	22.47,	'Guy',	28,	1,	1),
+(110,	'2022-09-03 16:08:44',	33.47,	'Craig',	13,	1,	1),
+(111,	'2022-09-03 16:08:44',	29.1,	'Banks',	9,	1,	0),
+(112,	'2022-09-03 16:08:44',	26.16,	'Mccoy',	43,	1,	0),
+(113,	'2022-09-03 16:08:44',	16.08,	'Wynn',	30,	1,	1),
+(114,	'2022-09-03 16:08:44',	15.9,	'Holmes',	26,	1,	0),
+(115,	'2022-09-03 16:08:44',	19.36,	'Juarez',	30,	1,	1),
+(116,	'2022-09-03 16:08:44',	30.62,	'Bentley',	43,	1,	1),
+(117,	'2022-09-03 16:08:44',	27.72,	'Simpson',	11,	1,	1),
+(118,	'2022-09-03 16:08:44',	19.21,	'Howell',	49,	1,	0),
+(119,	'2022-09-03 16:08:44',	19.46,	'Cummings',	31,	1,	1),
+(120,	'2022-09-03 16:08:44',	18.19,	'Mccoy',	30,	1,	1),
+(121,	'2022-09-03 16:08:44',	23.69,	'Herrera',	6,	1,	1),
+(122,	'2022-09-03 16:08:44',	21.71,	'Willis',	17,	1,	1),
+(123,	'2022-09-03 16:08:44',	23.11,	'Wilder',	18,	1,	1),
+(124,	'2022-09-03 16:08:44',	25.94,	'Newman',	11,	1,	0),
+(125,	'2022-09-03 16:08:44',	19.75,	'Salazar',	13,	1,	1),
+(126,	'2022-09-03 16:08:44',	25.37,	'Carey',	50,	1,	1),
+(127,	'2022-09-03 16:08:44',	18.11,	'Guthrie',	26,	1,	0),
+(128,	'2022-09-03 16:08:44',	19.89,	'Nolan',	20,	1,	0),
+(129,	'2022-09-03 16:08:44',	22.9,	'Mercado',	44,	1,	1),
+(130,	'2022-09-03 16:08:44',	27.83,	'Tucker',	6,	1,	1),
+(131,	'2022-09-03 16:08:44',	26.05,	'Tillman',	14,	1,	0),
+(132,	'2022-09-03 16:08:44',	24.55,	'Adkins',	40,	1,	1),
+(133,	'2022-09-03 16:08:44',	16.9,	'Beard',	21,	1,	1),
+(134,	'2022-09-03 16:08:44',	20.76,	'Kirkland',	29,	1,	1),
+(135,	'2022-09-03 16:08:44',	40.57,	'Todd',	31,	1,	0),
+(136,	'2022-09-03 16:08:44',	20.96,	'Mcmillan',	13,	1,	1),
+(137,	'2022-09-03 16:08:44',	40.57,	'Underwood',	7,	1,	0),
+(138,	'2022-09-03 16:08:44',	20.91,	'Tyson',	18,	1,	1),
+(139,	'2022-09-03 16:08:44',	17.73,	'Hopkins',	36,	1,	0),
+(140,	'2022-09-03 16:08:44',	32.13,	'Williams',	19,	1,	0),
+(141,	'2022-09-03 16:08:44',	36.12,	'Hickman',	17,	1,	1),
+(142,	'2022-09-03 16:08:44',	24.11,	'Wilkerson',	31,	1,	0),
+(143,	'2022-09-03 16:08:44',	31.13,	'Acevedo',	16,	1,	0),
+(144,	'2022-09-03 16:08:44',	27.84,	'Miles',	7,	1,	1),
+(145,	'2022-09-03 16:08:44',	40.57,	'Silva',	42,	1,	0),
+(146,	'2022-09-03 16:08:44',	33.87,	'Diaz',	29,	1,	0),
+(147,	'2022-09-03 16:08:44',	30.1,	'Langley',	10,	1,	0),
+(148,	'2022-09-03 16:08:44',	17.91,	'Battle',	16,	1,	1),
+(149,	'2022-09-03 16:08:44',	14.72,	'Farley',	7,	1,	1),
+(150,	'2022-09-03 16:08:44',	25.01,	'Phillips',	24,	1,	0),
+(151,	'2022-09-03 16:08:44',	18.97,	'Holt',	17,	1,	1),
+(152,	'2022-09-03 16:08:44',	19.28,	'Nieves',	18,	1,	1),
+(153,	'2022-09-03 16:08:44',	21.6,	'Walker',	28,	1,	0),
+(154,	'2022-09-03 16:08:44',	33.29,	'Head',	34,	1,	0),
+(155,	'2022-09-03 16:08:44',	40.57,	'Dennis',	44,	1,	0);
 
 DROP TABLE IF EXISTS `ProductsProducts`;
 CREATE TABLE `ProductsProducts` (
@@ -128,11 +243,6 @@ CREATE TABLE `ProductsProducts` (
   CONSTRAINT `ProductsProducts_FK_1` FOREIGN KEY (`secondaryProductId`) REFERENCES `Products` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `ProductsProducts` (`primaryProductId`, `secondaryProductId`) VALUES
-(2,	3),
-(4,	3),
-(2,	5),
-(4,	5);
 
 DROP TABLE IF EXISTS `Tables`;
 CREATE TABLE `Tables` (
@@ -147,6 +257,17 @@ CREATE TABLE `Tables` (
   CONSTRAINT `Tables_FK` FOREIGN KEY (`tenantId`) REFERENCES `Tenants` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `Tables` (`id`, `createdAt`, `tableNumber`, `limitPeople`, `isAvailable`, `tenantId`) VALUES
+(1,	'2022-09-23 05:20:11',	8,	4,	0,	1),
+(2,	'2022-09-23 05:20:11',	22,	17,	1,	1),
+(3,	'2022-09-23 05:20:11',	1,	7,	1,	1),
+(4,	'2022-09-23 05:20:11',	21,	12,	1,	1),
+(5,	'2022-09-23 05:20:11',	33,	3,	1,	1),
+(6,	'2022-09-23 05:20:11',	17,	9,	1,	1),
+(7,	'2022-09-23 05:20:11',	20,	13,	0,	1),
+(8,	'2022-09-23 05:20:11',	12,	13,	1,	1),
+(9,	'2022-09-23 05:20:11',	10,	3,	0,	1),
+(10,	'2022-09-23 05:20:11',	23,	13,	0,	1);
 
 DROP TABLE IF EXISTS `Tenants`;
 CREATE TABLE `Tenants` (
@@ -175,7 +296,29 @@ CREATE TABLE `Waiters` (
   CONSTRAINT `Waiters_FK` FOREIGN KEY (`tenantId`) REFERENCES `Tenants` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `Waiters` (`id`, `createdAt`, `name`, `age`, `gender`, `email`, `phoneNumber`, `tenantId`) VALUES
+(1,	'2022-09-21 20:33:05',	'Germane Figueiredo',	52,	'female',	'erat@outlook.couk',	'(94) 68777-4814',	1),
+(2,	'2022-09-21 20:33:05',	'Miranda Candido',	84,	'female',	'molestie.dapibus.ligula@protonmail.ca',	'(34) 65276-5637',	1),
+(3,	'2022-09-21 20:33:05',	'Hedley Braga',	64,	'female',	'quis@outlook.edu',	'(17) 35257-9433',	1),
+(4,	'2022-09-21 20:33:05',	'Anika Macedo',	48,	'male',	'interdum.ligula@google.net',	'(72) 87789-4683',	1),
+(5,	'2022-09-21 20:33:05',	'Dolan de Brito',	57,	'female',	'aliquet.odio@yahoo.ca',	'(12) 68254-6598',	1),
+(6,	'2022-09-21 20:33:05',	'Abel Bezerra',	47,	'male',	'placerat@outlook.couk',	'(24) 88559-6468',	1),
+(7,	'2022-09-21 20:33:05',	'Ramona Guedes',	22,	'male',	'sed.orci@aol.edu',	'(82) 48779-1235',	1),
+(8,	'2022-09-21 20:33:05',	'Tucker Teles',	74,	'female',	'ac@hotmail.ca',	'(45) 83234-3585',	1),
+(9,	'2022-09-21 20:33:05',	'Henry de Abreu',	46,	'male',	'enim.nunc@icloud.ca',	'(77) 75383-5885',	1),
+(10,	'2022-09-21 20:33:05',	'Kyra Cavalcante',	72,	'female',	'a.sollicitudin@outlook.edu',	'(33) 68247-5937',	1),
+(11,	'2022-09-21 20:33:05',	'Germane Figueiredo',	52,	'female',	'erat@outlook.couk',	'(94) 68777-4814',	1),
+(12,	'2022-09-21 20:33:05',	'Miranda Candido',	84,	'female',	'molestie.dapibus.ligula@protonmail.ca',	'(34) 65276-5637',	1),
+(13,	'2022-09-21 20:33:05',	'Hedley Braga',	64,	'female',	'quis@outlook.edu',	'(17) 35257-9433',	1),
+(14,	'2022-09-21 20:33:05',	'Anika Macedo',	48,	'male',	'interdum.ligula@google.net',	'(72) 87789-4683',	1),
+(15,	'2022-09-21 20:33:05',	'Dolan de Brito',	57,	'female',	'aliquet.odio@yahoo.ca',	'(12) 68254-6598',	1),
+(16,	'2022-09-21 20:33:05',	'Abel Bezerra',	47,	'male',	'placerat@outlook.couk',	'(24) 88559-6468',	1),
+(17,	'2022-09-21 20:33:05',	'Ramona Guedes',	22,	'male',	'sed.orci@aol.edu',	'(82) 48779-1235',	1),
+(18,	'2022-09-21 20:33:05',	'Tucker Teles',	74,	'female',	'ac@hotmail.ca',	'(45) 83234-3585',	1),
+(19,	'2022-09-21 20:33:05',	'Henry de Abreu',	46,	'male',	'enim.nunc@icloud.ca',	'(77) 75383-5885',	1),
+(20,	'2022-09-21 20:33:05',	'Kyra Cavalcante',	72,	'female',	'a.sollicitudin@outlook.edu',	'(33) 68247-5937',	1);
 
+DROP DATABASE IF EXISTS `BoriBiudi`;
 CREATE DATABASE `BoriBiudi` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `BoriBiudi`;
 
@@ -254,6 +397,7 @@ CREATE TABLE `Users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
+DROP DATABASE IF EXISTS `BusaApp`;
 CREATE DATABASE `BusaApp` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `BusaApp`;
 
@@ -411,6 +555,7 @@ CREATE TABLE `Vehicles` (
 INSERT INTO `Vehicles` (`color`, `licensePlate`, `model`, `year`, `brand`, `maxPassengers`, `id`, `owner`, `chassisNumber`, `hasAirConditioner`, `hasWifi`, `hasToilet`, `hasRefrigerator`, `vehicleTypeId`, `ownerId`, `colorId`, `city`, `cityId`) VALUES
 ('Magenta',	'GHI8978',	'XPTO',	2007,	'Mercedes',	40,	1,	'Ozymandias',	'NJNDA72',	1,	1,	1,	1,	2,	NULL,	NULL,	NULL,	NULL);
 
+DROP DATABASE IF EXISTS `ECommerce`;
 CREATE DATABASE `ECommerce` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `ECommerce`;
 
@@ -459,6 +604,7 @@ INSERT INTO `ProductsCategories` (`productId`, `categoryId`) VALUES
 (1,	1),
 (1,	2);
 
+DROP DATABASE IF EXISTS `FaceGram`;
 CREATE DATABASE `FaceGram` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `FaceGram`;
 
@@ -511,6 +657,7 @@ CREATE TABLE `Users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
+DROP DATABASE IF EXISTS `FamilyTree`;
 CREATE DATABASE `FamilyTree` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `FamilyTree`;
 
@@ -535,6 +682,7 @@ INSERT INTO `People` (`id`, `createdAt`, `name`, `momId`, `dadId`) VALUES
 (5,	'2022-08-06 21:19:54',	'José',	NULL,	NULL),
 (6,	'2022-08-06 21:20:28',	'Josézinho',	2,	5);
 
+DROP DATABASE IF EXISTS `MuteFlix`;
 CREATE DATABASE `MuteFlix` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `MuteFlix`;
 
@@ -614,6 +762,7 @@ CREATE TABLE `Users` (
 INSERT INTO `Users` (`id`, `createdAt`, `firstName`, `surName`, `birthDate`, `gender`, `email`, `password`, `profilePictureURL`) VALUES
 (1,	'2022-07-26 14:14:01',	'Wesley',	'Snipes',	'1987-07-30',	'male',	'lorem@gmail.com',	'lorem',	'lorem.jpg');
 
+DROP DATABASE IF EXISTS `NoisSobrevive`;
 CREATE DATABASE `NoisSobrevive` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `NoisSobrevive`;
 
@@ -661,6 +810,7 @@ CREATE TABLE `Stages` (
 INSERT INTO `Stages` (`id`, `name`, `lengthInMeters`, `heightInMeters`, `color`, `specialEffects`) VALUES
 (1,	'Heineken',	100,	5,	'Cyan',	1);
 
+DROP DATABASE IF EXISTS `SchoolProjects`;
 CREATE DATABASE `SchoolProjects` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `SchoolProjects`;
 
@@ -772,6 +922,7 @@ INSERT INTO `Tenants` (`id`, `createdAt`, `name`, `email`) VALUES
 (1,	'2022-08-06 22:05:55',	'ISEC',	'isec@gmail.com'),
 (2,	'2022-08-06 22:10:08',	'UNICAMP',	'unicamp@gmail.com');
 
+DROP DATABASE IF EXISTS `University`;
 CREATE DATABASE `University` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `University`;
 
@@ -819,4 +970,4 @@ INSERT INTO `Teachers` (`id`, `name`, `birthDate`, `gender`) VALUES
 (3,	'Grizelda',	'1980-08-18',	'female'),
 (4,	NULL,	NULL,	NULL);
 
--- 2022-08-24 22:52:36
+-- 2022-10-15 13:16:24
